@@ -1,4 +1,4 @@
-QT += quick 
+QT += quick bluetooth network
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -12,8 +12,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+INCLUDEPATH += ./bluetooth
+INCLUDEPATH += ./comm
+INCLUDEPATH += ./fs
+INCLUDEPATH += ./lib/include
+INCLUDEPATH += ./scripts
+
 SOURCES += \
         main.cpp \
+    bluetooth/bluetoothconnector.cpp \
+    comm/commcontroller.cpp \
+    comm/commdtpp.cpp
 
 RESOURCES += qml.qrc
 
@@ -28,6 +37,10 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+HEADERS += \
+    bluetooth/bluetoothconnector.h \
+    comm/commcontroller.h \
+    comm/commdtpp.h
 
 DISTFILES += \
     android/AndroidManifest.xml \
@@ -54,3 +67,9 @@ DISTFILES += \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
+unix:!macx: LIBS += -L$$PWD/lib/ -lDTP_Link
+
+INCLUDEPATH += $$PWD/lib/include
+DEPENDPATH += $$PWD/lib/include
+
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/libDTP_Link.a
